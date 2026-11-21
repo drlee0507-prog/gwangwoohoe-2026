@@ -65,6 +65,10 @@
   .lbl{font-size:12px;fill:var(--ink);font-weight:500}
   .area{font-family:"Noto Serif KR",serif;font-size:15px;fill:var(--pine);opacity:.9}
   .badge text{font-size:11px;font-weight:700;fill:#fff}
+  .start{position:absolute;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;background:rgba(43,38,34,.38);backdrop-filter:blur(2px);transition:opacity .35s}
+  .start.hide{opacity:0;pointer-events:none}
+  .start button{font-size:22px;font-weight:700;padding:18px 34px;border-radius:999px;background:#b8452f;border:none;color:#fff;box-shadow:0 8px 24px rgba(0,0,0,.25);line-height:1.3}
+  .start button small{display:block;font-size:13px;font-weight:500;opacity:.9;margin-top:4px}
   .warn{position:absolute;left:12px;top:12px;background:var(--red);color:#fff;font-size:13px;padding:6px 12px;border-radius:99px;opacity:0;transform:translateY(-6px);transition:.35s;pointer-events:none}
   .warn.on{opacity:1;transform:none}
   .sunset{position:absolute;right:12px;top:12px;background:var(--ink);color:#fff;font-size:13px;padding:6px 12px;border-radius:99px;opacity:0;transition:.35s;pointer-events:none}
@@ -86,6 +90,7 @@
 
   <div class="grid">
     <div class="card map">
+      <div class="start" id="start"><button id="startBtn">▶ 코스 보기<small>음악과 함께 시작해요</small></button></div>
       <div class="warn" id="warn">레드존 구간 · 17시 전에 통과</div>
       <div class="sunset" id="sunset">해 질 무렵 · 사진은 미리</div>
       <svg id="svg" viewBox="0 0 600 860" role="img" aria-label="북촌 산책 경로 지도">
@@ -336,7 +341,11 @@ document.getElementById("replay").onclick = () => { setProgress(0); playing = fa
 
 setProgress(0);
 const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-if (!reduce) setTimeout(() => play(false), 600);
+const startEl = document.getElementById("start");
+function hideStart(){ startEl.classList.add("hide"); }
+document.getElementById("startBtn").onclick = () => { hideStart(); setProgress(0); play(true); };
+["play","replay"].forEach(id => document.getElementById(id).addEventListener("click", hideStart));
+list.addEventListener("click", hideStart);
 </script>
 </body>
 </html>
