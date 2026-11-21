@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>광우회 연말모임 북촌 산책 코스</title>
+<!-- 산책 15:00~17:20, 저녁 깡통만두(백업 온미관 안국) 17:30~19:30, 카페 수달 19:45~21:00 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f5efe3; --paper2:#ebe2d0; --ink:#2b2622; --muted:#7a6f63;
+    --red:#b8452f; --red-soft:rgba(184,69,47,.14); --pine:#4f6b4a; --pine-soft:#cfd8c6;
+    --road:#dccfb7; --gold:#c9963b;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--paper);color:var(--ink);font-family:"Noto Sans KR",system-ui,sans-serif}
+  .wrap{max-width:1080px;margin:0 auto;padding:20px 16px 40px}
+  header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:14px}
+  h1{font-family:"Noto Serif KR",serif;font-size:clamp(22px,4vw,32px);margin:0;letter-spacing:-.5px}
+  .sub{color:var(--muted);font-size:14px;margin-top:4px}
+  .clock{font-family:"Noto Serif KR",serif;font-size:clamp(28px,6vw,44px);color:var(--red);font-variant-numeric:tabular-nums;line-height:1}
+  .clock small{display:block;font-family:"Noto Sans KR";font-size:12px;color:var(--muted);text-align:right;margin-top:4px}
+  .grid{display:grid;grid-template-columns:1.15fr 1fr;gap:18px}
+  @media (max-width:820px){.grid{grid-template-columns:1fr}}
+  .card{background:#fbf7ef;border:1px solid var(--paper2);border-radius:16px;overflow:hidden}
+  .map{position:relative}
+  svg{display:block;width:100%;height:auto}
+  .controls{display:flex;gap:8px;align-items:center;padding:10px 12px;border-top:1px solid var(--paper2);flex-wrap:wrap}
+  button{font:inherit;font-size:14px;border:1px solid var(--ink);background:var(--ink);color:#fff;border-radius:999px;padding:7px 16px;cursor:pointer}
+  button.ghost{background:transparent;color:var(--ink)}
+  .bar{flex:1;min-width:120px;height:6px;background:var(--paper2);border-radius:99px;overflow:hidden}
+  .bar i{display:block;height:100%;width:0;background:var(--red)}
+  .now{padding:16px 18px;border-bottom:1px solid var(--paper2);min-height:112px}
+  .now .t{font-size:13px;color:var(--red);font-weight:700}
+  .now .n{font-family:"Noto Serif KR",serif;font-size:21px;margin:4px 0 6px}
+  .now .d{font-size:14px;color:var(--muted);line-height:1.55}
+  ol{list-style:none;margin:0;padding:6px 0}
+  li{display:grid;grid-template-columns:30px 52px 1fr;gap:8px;align-items:start;padding:9px 18px;cursor:pointer;transition:background .25s,opacity .25s;opacity:.55}
+  li.done{opacity:.85}
+  li.active{opacity:1;background:var(--red-soft)}
+  li .no{width:24px;height:24px;border-radius:50%;background:var(--ink);color:#fff;font-size:12px;display:grid;place-items:center;font-weight:700}
+  li.active .no{background:var(--red)}
+  li .tm{font-size:13px;font-variant-numeric:tabular-nums;color:var(--muted);padding-top:3px}
+  li .nm{font-size:14.5px;font-weight:500}
+  li .ds{font-size:12.5px;color:var(--muted);margin-top:2px}
+  .tag{display:inline-block;font-size:11px;padding:1px 7px;border-radius:99px;background:var(--red);color:#fff;margin-left:6px;vertical-align:1px}
+  .notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:18px}
+  .note{background:#fbf7ef;border:1px solid var(--paper2);border-radius:12px;padding:12px 14px;font-size:13.5px;line-height:1.55}
+  .note b{display:block;margin-bottom:2px}
+  a.nv{display:inline-block;margin-top:6px;font-size:12px;color:#3c1e1e;font-weight:700;text-decoration:none;background:#fee500;border-radius:99px;padding:2px 10px}
+  a.nv:hover{filter:brightness(.95)}
+  .note a{color:#03a94d;font-weight:700}
+  .lbl{font-size:12px;fill:var(--ink);font-weight:500}
+  .area{font-family:"Noto Serif KR",serif;font-size:15px;fill:var(--pine);opacity:.9}
+  .badge text{font-size:11px;font-weight:700;fill:#fff}
+  .warn{position:absolute;left:12px;top:12px;background:var(--red);color:#fff;font-size:13px;padding:6px 12px;border-radius:99px;opacity:0;transform:translateY(-6px);transition:.35s;pointer-events:none}
+  .warn.on{opacity:1;transform:none}
+  .sunset{position:absolute;right:12px;top:12px;background:var(--ink);color:#fff;font-size:13px;padding:6px 12px;border-radius:99px;opacity:0;transition:.35s;pointer-events:none}
+  .sunset.on{opacity:1}
+  @keyframes pulse{0%{r:9;opacity:.6}100%{r:22;opacity:0}}
+  .pulse{animation:pulse 1.4s ease-out infinite}
+  @media (prefers-reduced-motion:reduce){.pulse{animation:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>북촌 산책 · 깡통만두 · 수달</h1>
+      <div class="sub">2026 서울광우회 연말모임 · 12월 12일(토) 15:00~21:00 · 북촌 8경 산책, 깡통만두 저녁, 카페 수달</div>
+    </div>
+    <div class="clock" id="clock">15:00<small id="dayphase">안국역 3번 출구 집결</small></div>
+  </header>
+
+  <div class="grid">
+    <div class="card map">
+      <div class="warn" id="warn">레드존 구간 · 17시 전에 통과</div>
+      <div class="sunset" id="sunset">해 질 무렵 · 사진은 미리</div>
+      <svg id="svg" viewBox="0 0 600 860" role="img" aria-label="북촌 산책 경로 지도">
+        <defs>
+          <pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <line x1="0" y1="0" x2="0" y2="8" stroke="#b8452f" stroke-width="2" opacity=".35"/>
+          </pattern>
+          <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#f5efe3"/><stop offset="1" stop-color="#efe6d4"/>
+          </linearGradient>
+        </defs>
+        <rect width="600" height="860" fill="url(#sky)"/>
+        <rect id="dusk" width="600" height="860" fill="#3b3550" opacity="0"/>
+
+        <!-- 배경 지형 -->
+        <path d="M0 150 L95 140 L110 720 L0 730 Z" fill="var(--pine-soft)"/>
+        <text class="area" x="22" y="430">경복궁</text>
+        <path d="M120 0 L330 0 L300 70 L150 85 Z" fill="var(--pine-soft)" opacity=".8"/>
+        <text class="area" x="190" y="45">삼청공원 방향</text>
+        <path d="M505 330 L600 300 L600 760 L520 770 Z" fill="var(--pine-soft)"/>
+        <text class="area" x="528" y="560">창덕궁</text>
+
+        <!-- 주요 도로 -->
+        <path d="M110 650 L600 640" stroke="var(--road)" stroke-width="16" fill="none"/>
+        <text class="lbl" x="440" y="630" fill="#8a7d6b">율곡로</text>
+        <path d="M323 650 L330 400 L300 250 L250 90" stroke="var(--road)" stroke-width="10" fill="none"/>
+        <text class="lbl" x="336" y="560" transform="rotate(-88 336 560)" style="fill:#8a7d6b">북촌로</text>
+        <path d="M150 85 L146 171 L208 360 L240 520 L300 650" stroke="var(--road)" stroke-width="9" fill="none"/>
+        <text class="lbl" x="120" y="250" transform="rotate(75 120 250)" style="fill:#8a7d6b">삼청동길</text>
+        <path d="M300 650 L295 840" stroke="var(--road)" stroke-width="10" fill="none"/>
+        <text class="lbl" x="250" y="690" style="fill:#8a7d6b">인사동길</text>
+
+        <!-- 레드존 -->
+        <ellipse cx="236" cy="215" rx="62" ry="78" fill="url(#hatch)" stroke="#b8452f" stroke-dasharray="4 4" opacity=".9"/>
+        <text x="236" y="302" text-anchor="middle" style="font-size:11px;fill:#b8452f;font-weight:700">레드존(북촌로11길) 17시~</text>
+
+        <!-- 경로 -->
+        <path id="route-base" fill="none" stroke="#c9b99c" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 9"/>
+        <path id="route" fill="none" stroke="var(--red)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+        <g id="stops"></g>
+        <g id="walker">
+          <circle class="pulse" r="9" fill="var(--red)"/>
+          <circle r="9" fill="var(--red)" stroke="#fff" stroke-width="3"/>
+        </g>
+      </svg>
+      <div class="controls">
+        <button id="play">▶ 재생</button>
+        <button class="ghost" id="replay">처음부터</button>
+        <button class="ghost" id="music" title="배경음악">♪ 음악 켜짐</button>
+        <div class="bar"><i id="prog"></i></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="now" id="now"></div>
+      <ol id="list"></ol>
+    </div>
+  </div>
+
+  <div class="notes">
+    <div class="note"><b>레드존 시간 지키기</b>북촌로11길 일대는 17:00부터 다음 날 10:00까지 관광객 출입이 제한돼요. 16시 40분 전에 빠져나오도록 짰어요.</div>
+    <div class="note"><b>편한 신발</b>가회동 골목과 삼청동 돌계단에 오르막과 계단이 조금 있어요.</div>
+    <div class="note"><b>조용히 걷기</b>주민이 실제로 사는 동네라 골목에서는 목소리를 낮춰주세요.</div>
+    <div class="note"><b>저녁 17:30 깡통만두</b>북촌로2길 5-6, 만두전골과 모둠전. 예약이 안 돼서 캐치테이블로 미리 줄을 서요. 산책 못 오는 친구는 17:30까지 여기로 바로 오면 돼요. <a href="https://map.naver.com/p/search/안국%20깡통만두" target="_blank" rel="noopener">네이버 지도</a></div>
+    <div class="note"><b>백업 식당 온미관 안국</b>깡통만두 바로 옆집, 서울식 불고기(☎ 0507-1371-0394). 대기가 너무 길면 이곳으로 가요. 최종 식당은 당일 17시쯤 단톡방 공지. <a href="https://map.naver.com/p/search/온미관%20안국" target="_blank" rel="noopener">네이버 지도</a></div>
+    <div class="note"><b>카페 19:45 카페 수달</b>저녁 식당에서 걸어서 3~4분, 안국역 근처 한옥 재즈 카페. 키오스크 주문. 21:00 마무리. <a href="https://map.naver.com/p/search/안국%20카페%20수달" target="_blank" rel="noopener">네이버 지도</a></div>
+  </div>
+  <div style="margin-top:14px;font-size:12px;color:var(--muted);text-align:right">배경음악: Unbreakable Ties - leberch (Pixabay)</div>
+</div>
+
+<script>
+const STOPS = [
+  {m:0,   x:323, y:627, n:"안국역 3번 출구 집결", d:"3호선 안국역 3번 출구(현대건설 사옥 쪽) 앞. 늦는 친구 기다렸다가 바로 옆 계동길로 출발", lx:14, ly:18},
+  {m:10,  x:370, y:471, n:"계동길 · 북촌문화센터", d:"옛 골목길과 한옥 문화센터. 화장실은 여기서", lx:14, ly:6},
+  {m:30,  x:479, y:455, n:"1경 창덕궁 전경 · 2경 원서동 공방길", d:"창덕궁 담장을 따라 걷는 조용한 길", lx:-12, ly:-14, anchor:"end"},
+  {m:50,  x:317, y:265, n:"3경 가회동 11번지", d:"북촌로12길 일대, 한옥 공방과 전통 가옥이 모인 골목", lx:12, ly:24},
+  {m:70,  x:236, y:250, n:"4~7경 북촌로11길 한옥골목", d:"기와지붕이 겹쳐 보이는 대표 포토스팟. 단체사진 찍기 좋은 곳", lx:16, ly:6, red:true},
+  {m:90,  x:240, y:180, n:"가회동 31번지 언덕", d:"한옥 지붕 너머로 도심이 함께 보이는 언덕", lx:16, ly:4},
+  {m:100, x:173, y:125, n:"8경 삼청동 돌계단길", d:"돌계단을 내려가 삼청동으로", lx:-12, ly:-6, anchor:"end"},
+  {m:110, x:146, y:171, n:"삼청동길", d:"카페와 갤러리 거리를 따라 천천히", lx:-12, ly:18, anchor:"end"},
+  {m:120, x:208, y:360, n:"정독도서관 앞 · 감고당길", d:"감고당길을 따라 안국·인사동 쪽으로 내려오기", lx:-12, ly:4, anchor:"end"},
+  {m:140, x:354, y:529, n:"깡통만두 · 저녁 식사", d:"17:30~19:30 만두전골과 모둠전. 회장 인사와 건배, 식사, 광우회 어워즈와 추억 퀴즈. 대기가 길면 바로 옆 온미관 안국으로", lx:16, ly:18, dep:270, meal:true},
+  {m:285, x:272, y:623, n:"카페 수달 · 카페", d:"19:45~21:00 재즈가 흐르는 한옥 카페에서 차 한잔하며 정다운 대화, 단체사진. 21:00 마무리", lx:-14, ly:5, anchor:"end", meal:true}
+];
+// 각 경유지의 정확한 위치: 카카오맵 핀 링크 (이름, 위도, 경도). 좌표가 없는 곳은 카카오맵 검색
+const KM = [
+  ["p","안국역 3번 출구",37.577074,126.9863068],
+  ["p","북촌문화센터",37.5790313,126.9864082],
+  ["p","북촌1경 창덕궁 전경",37.579289,126.988588],
+  ["p","북촌3경 가회동 11번지",37.5823011,126.9853429],
+  ["p","북촌로11길 한옥골목(북촌6경)",37.5825303,126.9836464],
+  ["p","가회동 31번지 언덕",37.5836439,126.983774],
+  ["p","북촌8경 삼청동 돌계단길",37.5845117,126.9824639],
+  ["p","삼청동길",37.5837936,126.9819183],
+  ["p","정독도서관",37.5807856,126.9831611],
+  ["p","깡통만두",37.578113,126.9860787],
+  ["p","카페 수달",37.5766275,126.9844313]
+];
+const NV = KM.map(k => k[0] === "p"
+  ? "https://map.kakao.com/link/map/" + encodeURIComponent(k[1]) + "," + k[2] + "," + k[3]
+  : "https://map.kakao.com/link/search/" + encodeURIComponent(k[1]));
+STOPS.forEach((s,i)=>s.link=NV[i]);
+const TOTAL = 360, DURATION = 30000; // 30초 동안 15:00~21:00 재생
+// 재생 진행률(0~1)과 시계(분)의 대응: 산책은 천천히, 식사·카페 시간은 빠르게
+const KEYS = [[0,0],[0.68,140],[0.80,270],[0.88,285],[1,360]];
+function clockAt(p){
+  for (let k = 1; k < KEYS.length; k++){
+    if (p <= KEYS[k][0]){ const [p0,m0] = KEYS[k-1], [p1,m1] = KEYS[k]; return m0 + (m1-m0) * (p-p0)/(p1-p0); }
+  }
+  return TOTAL;
+}
+function progAt(m){
+  for (let k = 1; k < KEYS.length; k++){
+    if (m <= KEYS[k][1]){ const [p0,m0] = KEYS[k-1], [p1,m1] = KEYS[k]; return p0 + (p1-p0) * (m-m0)/(m1-m0); }
+  }
+  return 1;
+}
+const svgNS = "http://www.w3.org/2000/svg";
+const d = "M" + STOPS.map(s => s.x + " " + s.y).join(" L");
+const route = document.getElementById("route"), base = document.getElementById("route-base");
+route.setAttribute("d", d); base.setAttribute("d", d);
+const L = route.getTotalLength();
+route.style.strokeDasharray = L; route.style.strokeDashoffset = L;
+
+// 각 정류장까지의 경로 길이
+const cum = [0];
+for (let i = 1; i < STOPS.length; i++) {
+  cum.push(cum[i-1] + Math.hypot(STOPS[i].x - STOPS[i-1].x, STOPS[i].y - STOPS[i-1].y));
+}
+
+// 정류장 마커
+const g = document.getElementById("stops");
+STOPS.forEach((s, i) => {
+  const b = document.createElementNS(svgNS, "g"); b.setAttribute("class", "badge");
+  b.innerHTML = `<circle cx="${s.x}" cy="${s.y}" r="11" fill="${s.red ? '#b8452f' : s.meal ? '#c9963b' : '#2b2622'}" stroke="#fff" stroke-width="2"/>
+    <text x="${s.x}" y="${s.y + 4}" text-anchor="middle">${i + 1}</text>`;
+  const t = document.createElementNS(svgNS, "text");
+  t.setAttribute("x", s.x + s.lx); t.setAttribute("y", s.y + s.ly);
+  t.setAttribute("text-anchor", s.anchor || "start"); t.setAttribute("class", "lbl");
+  t.style.paintOrder = "stroke"; t.style.stroke = "#f5efe3"; t.style.strokeWidth = "4";
+  t.textContent = fmt(s.m) + " " + s.n.split(" · ")[0];
+  g.appendChild(b); g.appendChild(t);
+});
+
+// 일정 목록
+const list = document.getElementById("list");
+STOPS.forEach((s, i) => {
+  const li = document.createElement("li");
+  li.innerHTML = `<span class="no">${i + 1}</span><span class="tm">${fmt(s.m)}</span>
+    <span><div class="nm">${s.n}${s.red ? '<span class="tag">17시 전</span>' : ''}</div><div class="ds">${s.d}</div></span>`;
+  li.onclick = () => { pause(); setProgress(progAt(s.m)); setMinute(s.m); };
+  list.appendChild(li);
+});
+
+function fmt(m){ const h = 15 + Math.floor(m / 60), mm = m % 60; return h + ":" + String(mm).padStart(2, "0"); }
+
+const walker = document.getElementById("walker"), clock = document.getElementById("clock");
+const prog = document.getElementById("prog"), now = document.getElementById("now");
+const warn = document.getElementById("warn"), sunset = document.getElementById("sunset"), dusk = document.getElementById("dusk");
+let progress = 0, minute = 0, playing = false, last = 0, current = -1;
+
+function setProgress(p){
+  progress = Math.max(0, Math.min(1, p));
+  setMinute(clockAt(progress));
+}
+function setMinute(m){
+  minute = Math.max(0, Math.min(TOTAL, m));
+  let i = 0; while (i < STOPS.length - 1 && STOPS[i + 1].m <= minute + 1e-6) i++;
+  let len;
+  if (i >= STOPS.length - 1) len = L;
+  else {
+    const a = STOPS[i], b = STOPS[i + 1];
+    // 각 정류장에서 머물렀다가(dep) 다음 정류장까지 걷기
+    const dep = a.dep != null ? a.dep : a.m + 0.3 * (b.m - a.m);
+    const w = Math.max(0, Math.min(1, (minute - dep) / (b.m - dep)));
+    const e = w < .5 ? 2 * w * w : 1 - Math.pow(-2 * w + 2, 2) / 2;
+    len = cum[i] + (cum[i + 1] - cum[i]) * e;
+  }
+  const p = route.getPointAtLength(Math.min(len, L - 0.01));
+  walker.setAttribute("transform", `translate(${p.x} ${p.y})`);
+  route.style.strokeDashoffset = L - len;
+  const mm = Math.floor(minute);
+  clock.firstChild.nodeValue = fmt(mm);
+  prog.style.width = (progress * 100) + "%";
+  warn.classList.toggle("on", minute >= 62 && minute < 100);
+  sunset.classList.toggle("on", minute >= 118 && minute < 140);
+  dusk.setAttribute("opacity", Math.min(0.3, Math.max(0, (minute - 105) / 60) * 0.3));
+  if (i !== current) {
+    current = i;
+    const s = STOPS[i];
+    now.innerHTML = `<div class="t">${i + 1}번째 · ${fmt(s.m)}</div><div class="n">${s.n}</div><div class="d">${s.d}</div><a class="nv" href="${s.link}" target="_blank" rel="noopener">카카오맵에서 정확한 위치 보기</a>`;
+    document.getElementById("dayphase").textContent = s.n.split(" · ")[0];
+    [...list.children].forEach((li, k) => { li.classList.toggle("active", k === i); li.classList.toggle("done", k < i); });
+  }
+}
+
+function tick(t){
+  if (!playing) return;
+  const dt = last ? t - last : 0; last = t;
+  setProgress(progress + dt / DURATION);
+  if (progress >= 1) { playing = false; Music.fadeOut(); document.getElementById("play").textContent = "▶ 다시 보기"; return; }
+  requestAnimationFrame(tick);
+}
+
+// ===== 배경음악: Unbreakable Ties (leberch, Pixabay 무료 음원) =====
+const Music = (() => {
+  const VOL = 0.7;
+  let audio = null, on = true, fadeId = null;
+  function el(){
+    if (!audio){ audio = new Audio("music/bgm.mp3"); audio.loop = true; audio.preload = "auto"; audio.volume = VOL; }
+    return audio;
+  }
+  function clearFade(){ if (fadeId){ clearInterval(fadeId); fadeId = null; } }
+  return {
+    get on(){ return on; },
+    start(reset){
+      if (!on) return;
+      clearFade();
+      try {
+        const a = el(); a.volume = VOL;
+        if (reset) a.currentTime = 0;
+        const pr = a.play(); if (pr && pr.catch) pr.catch(() => {});
+      } catch (e) { /* 소리 재생이 막힌 환경 */ }
+    },
+    stop(){ clearFade(); if (audio) audio.pause(); },
+    fadeOut(){
+      if (!audio || audio.paused) return;
+      clearFade();
+      fadeId = setInterval(() => {
+        audio.volume = Math.max(0, audio.volume - 0.035);
+        if (audio.volume <= 0.01){ clearFade(); audio.pause(); audio.volume = VOL; }
+      }, 150);
+    },
+    toggle(){ on = !on; if (!on) this.stop(); return on; }
+  };
+})();
+const musicBtn = document.getElementById("music");
+musicBtn.onclick = () => {
+  const on = Music.toggle();
+  musicBtn.textContent = on ? "♪ 음악 켜짐" : "♪ 음악 꺼짐";
+  if (on && playing) Music.start(false);
+};
+
+function play(fromUser){ if (progress >= 1) setProgress(0); playing = true; last = 0; document.getElementById("play").textContent = "❚❚ 일시정지"; requestAnimationFrame(tick); if (fromUser) Music.start(false); }
+function pause(){ playing = false; Music.stop(); document.getElementById("play").textContent = "▶ 재생"; }
+document.getElementById("play").onclick = () => playing ? pause() : play(true);
+document.getElementById("replay").onclick = () => { setProgress(0); playing = false; Music.stop(); play(true); Music.start(true); };
+
+setProgress(0);
+const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+if (!reduce) setTimeout(() => play(false), 600);
+</script>
+</body>
+</html>
